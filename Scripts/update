@@ -1,0 +1,65 @@
+#!/bin/bash
+set -euo pipefail
+
+BASE_DIR="$(cd "$(dirname "$0")/.."; pwd)"
+
+
+has() {
+	local cmd="$1"
+	which "$cmd" >/dev/null 2>&1
+}
+
+
+echo-stderr() {
+	local message="$*"
+	printf "%s\n" "$message" 1>&2
+}
+
+
+throw() {
+	local message="$*"
+	echo-stderr "error: $message"
+	false
+}
+
+
+usage() {
+	cat - 1>&2 <<-EOS
+usage: update [<options>]
+
+OPTIONS
+	-h, --help    print this usage
+EOS
+}
+
+
+usage-error() {
+	local message="$*"
+	echo-stderr "$message"
+	usage
+	false
+}
+
+
+main() {
+	(cd "$BASE_DIR"
+		git submodule update --init --recursive
+		(cd ./Resource/swift-ble-assigned-numbers-gen
+			git pull origin master
+		)
+		./Resource/swift-ble-assigned-numbers-gen/Scripts/generate-assigned-numbers > ./Sources/BLEAssignedNumbers/AssignedNumbers.generated.swift
+		if git add ./Resource/swift-ble-assigned-numbers-gen ./Sources/BLEAssignedNumbers/AssignedNumbers.generated.swift; then
+			git commit -m "Update"
+			git push origin master
+		fi
+	)
+}
+
+
+case "$*" in
+	--help | -h)
+		usage
+		false ;;
+	*)
+		main "$@" ;;
+esac
