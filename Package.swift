@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-ble-macro",
+    name: "swift-ble-assigned-numbers",
     products: [
         .library(
             name: "BLEAssignedNumbers",
