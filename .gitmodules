@@ -1,3 +1,6 @@
 [submodule "Resources/swift-ble-assigned-numbers-gen"]
 	path = Resources/swift-ble-assigned-numbers-gen
 	url = https://github.com/Kuniwak/swift-ble-assigned-numbers-gen
+[submodule "Scripts/xcodebuild-scripts"]
+	path = Scripts/xcodebuild-scripts
+	url = https://github.com/Kuniwak/xcodebuild-scripts
